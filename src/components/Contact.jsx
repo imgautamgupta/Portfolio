@@ -15,17 +15,97 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // ── Guard: prevent double-submit ────────────────────────────────────
+        if (isSubmitting) return;
+
+        // ── Honeypot: silently abort if the hidden checkbox was filled in ───
+        const form = e.currentTarget;
+        const botcheck = form.elements['botcheck'];
+        if (botcheck && botcheck.checked) return;
+
+        // ── Client-side validation ───────────────────────────────────────────
+        const trimmedName    = formData.name.trim();
+        const trimmedEmail   = formData.email.trim();
+        const trimmedMessage = formData.message.trim();
+
+        if (!trimmedName) {
+            setToast({ message: 'Please enter your name.', type: 'error' });
+            return;
+        }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(trimmedEmail)) {
+            setToast({ message: 'Please enter a valid email address.', type: 'error' });
+            return;
+        }
+        if (!trimmedMessage) {
+            setToast({ message: 'Please enter a message.', type: 'error' });
+            return;
+        }
+        if (trimmedMessage.length > 2000) {
+            setToast({ message: 'Message must be 2,000 characters or fewer.', type: 'error' });
+            return;
+        }
+
+        // ── Env-key guard ───────────────────────────────────────────────────
+        const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
+        if (!accessKey || accessKey === 'PASTE_KEY_HERE') {
+            console.error(
+                '[Contact] VITE_WEB3FORMS_KEY is not set. ' +
+                'Add it to .env and to your hosting provider\'s environment variables.'
+            );
+            setToast({
+                message: 'Contact form is not configured yet. Please email me directly.',
+                type: 'error',
+            });
+            return;
+        }
+
         setIsSubmitting(true);
 
-        // Simulate form submission
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    access_key: accessKey,
+                    name:       trimmedName,
+                    email:      trimmedEmail,
+                    message:    trimmedMessage,
+                    subject:    `Portfolio message from ${trimmedName}`,
+                    from_name:  'Portfolio Contact Form',
+                    botcheck:   false,
+                }),
+            });
 
-        setToast({
-            message: "Message sent successfully! I'll get back to you soon.",
-            type: 'success'
-        });
-        setFormData({ name: '', email: '', message: '' });
-        setIsSubmitting(false);
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                setToast({
+                    message: "Message sent! I'll get back to you soon.",
+                    type: 'success',
+                });
+                // Only clear the form on genuine success
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                // API returned an error payload
+                throw new Error(data.message || 'Submission failed');
+            }
+        } catch (err) {
+            console.error('[Contact] Web3Forms error:', err);
+            setToast({
+                message: err.message === 'Failed to fetch'
+                    ? 'Could not reach the server. Check your connection and try again.'
+                    : `Failed to send: ${err.message}`,
+                type: 'error',
+            });
+            // Do NOT clear the form — visitor keeps their message
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const contactInfo = [
@@ -163,6 +243,24 @@ const Contact = () => {
                     {/* Contact Form */}
                     <div className={`animate-on-scroll-right ${sectionVisible ? 'visible' : ''}`}>
                         <form onSubmit={handleSubmit} className="space-y-6">
+                            {/*
+                             * HONEYPOT — spam protection.
+                             * Bots fill every field; humans never see this.
+                             * Visually hidden but NOT display:none so it stays in the DOM.
+                             */}
+                            <div
+                                aria-hidden="true"
+                                style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}
+                            >
+                                <input
+                                    type="checkbox"
+                                    name="botcheck"
+                                    id="botcheck"
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    defaultChecked={false}
+                                />
+                            </div>
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-neutral-400 mb-2">
                                     Your Name
