@@ -12,16 +12,11 @@ import './animation/gsap.js'
 import { initScroll, destroyScroll } from './utils/scroll.js'
 initScroll()
 
-// ─── 3. Initialise global interaction manager ───────────────────────────────
-import { InteractionManager } from './experience/InteractionManager.js'
-InteractionManager.getInstance().init()
-
-// ─── 4. HMR cleanup (development only) ──────────────────────────────────────
+// ─── 3. HMR cleanup (development only) ──────────────────────────────────────
 // Prevents duplicate Lenis instances and dangling RAF loops during hot reload.
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     destroyScroll()
-    InteractionManager.destroy()
   })
 }
 

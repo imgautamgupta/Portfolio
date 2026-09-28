@@ -1,8 +1,15 @@
 import { useState } from 'react';
 import CinematicIntro from './components/CinematicIntro';
-import ExperienceRoot from './experience/ExperienceRoot';
+import Letterbox from './components/Letterbox';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Contact from './components/Contact';
+import BackToTop from './components/BackToTop';
+import CustomCursor from './components/CustomCursor';
+import BackgroundStars from './components/BackgroundStars';
 import useLenis from './hooks/useLenis';
 
 function App() {
@@ -10,46 +17,42 @@ function App() {
   // introPlaying = false → iris wipe finished, normal scrolling resumes
   const [introPlaying, setIntroPlaying] = useState(true);
 
-  // BUG 3 FIX: Block Lenis scroll while the intro is playing.
+  // Block Lenis scroll while the intro is playing.
   // useLenis(false) calls lenis.stop() + lenis.scrollTo(0, {immediate:true}).
   // useLenis(true)  calls lenis.start() once the intro completes.
   useLenis(!introPlaying);
 
   const handleIntroComplete = () => {
-    // BUG 3 FIX: Guarantee the native scroll position is at the top
-    // before handing off to Lenis, regardless of any scroll that may have
-    // slipped through during the intro (belt-and-suspenders alongside
-    // useLenis's own scrollTo call).
+    // Guarantee the native scroll position is at the top before handing
+    // off to Lenis, regardless of any scroll that may have slipped through
+    // during the intro.
     window.scrollTo(0, 0);
     setIntroPlaying(false);
   };
 
   return (
     <>
-      {/*
-       * ExperienceRoot renders immediately — its 3D canvas/Hero is visible
-       * THROUGH the growing iris hole during the wipe. This is what gets
-       * "revealed" as the circle expands. Mounting it early also means
-       * Three.js has time to initialise while the title card is showing.
-       */}
-      <ExperienceRoot />
+      {/* Persistent cinematic chrome */}
+      <Letterbox />
+      <CustomCursor />
+      <BackgroundStars />
 
-      {/*
-       * Scrollable content that lives below the fixed 3D experience.
-       * A 100vh spacer creates the "scroll past the canvas" behaviour.
-       */}
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        {/* Spacer to push content past the fixed ExperienceRoot canvas */}
-        <div style={{ height: '100vh' }} aria-hidden="true" />
-        <div style={{ background: '#000008' }}>
-          <About />
-          <Skills />
-        </div>
-      </div>
+      {/* Navigation */}
+      <Navbar />
+
+      {/* Scrollable page content */}
+      <Hero />
+      <About />
+      <Skills />
+      <Projects />
+      <Contact />
+      <BackToTop />
 
       {/*
        * CinematicIntro sits on top (z-[95]) and returns null once done,
        * so the overlay disappears cleanly after the iris wipe completes.
+       * Mounting it last means the Hero is already in the DOM and has begun
+       * loading when the iris starts to open — creating a true "reveal".
        */}
       {introPlaying && (
         <CinematicIntro onComplete={handleIntroComplete} />
