@@ -128,7 +128,7 @@ const Hero = () => {
                 {/* Social Links */}
                 <div className="flex items-center justify-center gap-6 mt-12 opacity-0 animate-[fadeIn_1s_ease-out_1.1s_forwards]">
                     <a
-                        href="https://github.com/gautamgupta"
+                        href="https://github.com/imgautamgupta"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-neutral-400 hover:text-white transition-all hover:scale-110 transform p-2 hover:bg-neutral-800/50 rounded-full"

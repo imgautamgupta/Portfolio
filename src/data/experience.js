@@ -16,7 +16,7 @@ export const PERSONAL = {
   tagline: 'B.Tech in Information Technology Student',
   bio: 'Passionate about building high-performance web applications and working with technologies like OCR and OpenCV.',
   email: 'gautamguptaworkin@gmail.com',
-  github: 'https://github.com/gautamgupta',
+  github: 'https://github.com/imgautamgupta',
   linkedin: 'https://www.linkedin.com/in/gautam-gupta-620559285',
   location: 'India',
 };

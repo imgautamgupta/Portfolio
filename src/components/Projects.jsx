@@ -195,7 +195,7 @@ const Projects = () => {
                 {/* View More */}
                 <div className={`text-center mt-12 animate-on-scroll ${sectionVisible ? 'visible' : ''}`} style={{ transitionDelay: '0.6s' }}>
                     <a
-                        href="https://github.com/gautamgupta"
+                        href="https://github.com/imgautamgupta"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-6 py-3 border border-neutral-700 hover:border-indigo-500 text-neutral-300 hover:text-indigo-400 rounded-full font-medium transition-all hover:bg-indigo-500/10"

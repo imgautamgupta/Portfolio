@@ -26,7 +26,7 @@ export const PROJECTS = [
     image:
       'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1470&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/gautamgupta',
+    github: 'https://github.com/imgautamgupta',
     featured: true,
     year: 2024,
     status: 'complete',
@@ -44,7 +44,7 @@ export const PROJECTS = [
     image:
       'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1470&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/gautamgupta',
+    github: 'https://github.com/imgautamgupta',
     featured: true,
     year: 2024,
     status: 'complete',
@@ -61,7 +61,7 @@ export const PROJECTS = [
     image:
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1470&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/gautamgupta',
+    github: 'https://github.com/imgautamgupta',
     featured: false,
     year: 2024,
     status: 'requires-content', // Verified: No invented functionality
@@ -78,7 +78,7 @@ export const PROJECTS = [
     image:
       'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1470&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/gautamgupta',
+    github: 'https://github.com/imgautamgupta',
     featured: false,
     year: 2024,
     status: 'requires-content', // Verified: No invented functionality
@@ -94,8 +94,8 @@ export const PROJECTS = [
     category: 'all',
     image:
       'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1470&auto=format&fit=crop',
-    link: 'https://github.com/gautamgupta',
-    github: 'https://github.com/gautamgupta',
+    link: 'https://github.com/imgautamgupta',
+    github: 'https://github.com/imgautamgupta',
     featured: false,
     year: 2024,
     status: 'archive',
